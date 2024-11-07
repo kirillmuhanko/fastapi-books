@@ -1,12 +1,25 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 
 
 class UserRegisterRequestDto(BaseModel):
-    username: str
-    email: str
-    first_name: str
-    last_name: str
-    password: str
-    role: str
+    """
+    DTO for user registration, including required fields for creating a new user account.
+    """
+    email: EmailStr = Field(..., description="User's email address")
+    username: str = Field(..., min_length=3, max_length=20, description="User's username")
+    first_name: str = Field(..., min_length=2, max_length=50, description="User's first name")
+    last_name: str = Field(..., min_length=2, max_length=50, description="User's last name")
+    password: str = Field(..., min_length=8, max_length=128, description="User's password")
+    role: str = Field(..., description="User's role")
 
-# make hashed_password field for service layer, it will be mapped manually.
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "email": "john.doe@example.com",
+                "username": "johndoe123",
+                "first_name": "John",
+                "last_name": "Doe",
+                "password": "StrongPassword123!",
+                "role": "user"
+            }
+        }

@@ -1,15 +1,11 @@
 from typing import Annotated
-from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session
+
 from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import BaseModel
 from starlette import status
+
 from app.controllers_dtos.auth.user_register_request_dto import UserRegisterRequestDto
-from app.dependencies.service_dependencies import get_user_service
-from app.services.user_service import UserService
-from app.models.database.user_model import UserModel
-from app.core.database import get_db
-from pydantic import BaseModel, Field
-from typing import Optional
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

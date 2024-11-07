@@ -1,13 +1,14 @@
-from typing import Annotated
-from sqlalchemy.orm import Session
+from typing import Optional, Annotated
+
 from fastapi import APIRouter, Depends
-from starlette import status
-from app.dependencies.service_dependencies import get_user_service
-from app.services.user_service import UserService
-from app.models.database.user_model import UserModel
-from app.core.database import get_db
 from pydantic import BaseModel, Field
-from typing import Optional
+from sqlalchemy.orm import Session
+from starlette import status
+
+from app.core.database import get_db
+from app.dependencies.service_dependencies import get_user_service
+from app.models.database.user_model import UserModel
+from app.services.user_service import UserService
 
 
 class BookRequest(BaseModel):
