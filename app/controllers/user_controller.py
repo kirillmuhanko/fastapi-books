@@ -2,10 +2,10 @@ from typing import Annotated
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 from starlette import status
-from dependencies.service_dependencies import get_user_service
-from services.user_service import UserService
-from models.database.user_model import UserModel
-from core.database import get_db
+from app.dependencies.service_dependencies import get_user_service
+from app.services.user_service import UserService
+from app.models.database.user_model import UserModel
+from app.core.database import get_db
 from pydantic import BaseModel, Field
 from typing import Optional
 

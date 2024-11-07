@@ -1,6 +1,6 @@
-from repositories.user_repository import UserRepository
+from app.repositories.user_repository import UserRepository
 from fastapi import Depends
-from dependencies.repository_dependencies import get_user_repository
+from app.dependencies.repository_dependencies import get_user_repository
 
 class UserService:
     def __init__(self, user_repository: UserRepository = Depends(get_user_repository)):

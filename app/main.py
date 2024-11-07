@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from core.database import engine
+from app.core.database import engine
 
 # import models
-from controllers import auth_controller, user_controller
+from app.controllers import auth_controller, user_controller
 
 app = FastAPI()
 

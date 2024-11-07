@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from core.database import get_db
-from models.database.user_model import UserModel
+from app.core.database import get_db
+from app.models.database.user_model import UserModel
 import logging
 from fastapi import Depends
 
