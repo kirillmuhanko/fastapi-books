@@ -11,8 +11,6 @@ from app.core.database import get_db
 from pydantic import BaseModel, Field
 from typing import Optional
 
-from app.repositories.user_repository import UserRepository
-
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
@@ -29,5 +27,3 @@ class Token(BaseModel):
 @router.post("/login", response_model=Token)
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     return {"access_token": "123", "token_type": "bearer"}
-
-UserRepository
