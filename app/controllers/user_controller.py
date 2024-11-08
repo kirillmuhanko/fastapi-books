@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from app.core.database import get_db
-from app.dependencies.service_dependencies import get_user_service
-from app.models.database.user_model import UserModel
+from app.dependency_injection.service_registry import get_user_service
+from app.models.books_db_context.user_model import UserModel
 from app.services.user_service import UserService
 
 
@@ -44,8 +44,8 @@ async def get_user(db: db_dependency):
 
 
 @router.get("/users/{user_id}")
-async def get_user(user_id: int, 
-                   user_service: UserService = Depends(get_user_service), 
+async def get_user(user_id: int,
+                   user_service: UserService = Depends(get_user_service),
                    user_service2: UserService = Depends(get_user_service)):
     user = await user_service.get_user(user_id)
     user2 = await user_service2.get_user(user_id)

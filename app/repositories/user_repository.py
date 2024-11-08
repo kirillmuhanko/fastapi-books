@@ -1,8 +1,11 @@
-from sqlalchemy.orm import Session
-from app.core.database import get_db
-from app.models.database.user_model import UserModel
 import logging
+
 from fastapi import Depends
+from sqlalchemy.orm import Session
+
+from app.core.database import get_db
+from app.models.books_db_context.user_model import UserModel
+
 
 class UserRepository:
     def __init__(self, db: Session = Depends(get_db)):
