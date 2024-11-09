@@ -15,6 +15,10 @@ class UserRepository:
         self.db.refresh(user)
         return user
 
+    async def get_by_username(self, username: str):
+        user = self.db.query(UserModel).filter_by(username=username).first()
+        return user
+
     async def get_user(self, user_id: int):
         logging.basicConfig(level=logging.INFO)
         logger = logging.getLogger(__name__)
