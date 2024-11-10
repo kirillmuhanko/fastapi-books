@@ -1,13 +1,19 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
+from alembic import context
+from sqlalchemy import engine_from_config, MetaData
 from sqlalchemy import pool
 
-from alembic import context
+from app.models.books_db_context import user_model, todos_model
 
-from models.database import (
-    user_model, 
-    todos_model)
+
+def combine_metadata(*metadata_objects):
+    combined_metadata = MetaData()
+    for metadata in metadata_objects:
+        for table in metadata.tables.values():
+            table.tometadata(combined_metadata)
+    return combined_metadata
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -15,17 +21,18 @@ config = context.config
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
-#if config.config_file_name is not None:
+# if config.config_file_name is not None:
 fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-#target_metadata = models.Base.metadata
-target_metadata = [
-    user_model.Base.metadata, 
-    todos_model.Base.metadata]
+# target_metadata = models.Base.metadata
+target_metadata = combine_metadata(
+    user_model.Base.metadata,
+    todos_model.Base.metadata)
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
