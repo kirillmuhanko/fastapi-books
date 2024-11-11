@@ -1,30 +1,30 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Optional, List
+from typing import TypeVar, Any, Generic, Optional, List
 from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-T = TypeVar('T')
+_T = TypeVar("_T", bound=Any)
 
 
-class BaseRepository(ABC, Generic[T]):
+class BaseRepository(ABC, Generic[_T]):
     def __init__(self, db: Session):
         self.db = db
 
     @abstractmethod
-    async def create(self, entity: T):
+    async def create(self, entity: _T):
         pass
 
     @abstractmethod
-    async def get(self, entity_id: UUID) -> Optional[T]:
+    async def get(self, entity_id: UUID) -> Optional[_T]:
         pass
 
     @abstractmethod
-    async def get_all(self, limit: int = 100, offset: int = 0) -> List[T]:
+    async def get_all(self, limit: int = 100, offset: int = 0) -> List[_T]:
         pass
 
     @abstractmethod
-    async def update(self, entity: T) -> Optional[T]:
+    async def update(self, entity: _T) -> Optional[_T]:
         pass
 
     @abstractmethod
@@ -32,11 +32,11 @@ class BaseRepository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def bulk_create(self, entities: List[T]) -> List[T]:
+    async def bulk_create(self, entities: List[_T]) -> List[_T]:
         pass
 
     @abstractmethod
-    async def bulk_update(self, entities: List[T]) -> List[T]:
+    async def bulk_update(self, entities: List[_T]) -> List[_T]:
         pass
 
     @abstractmethod
@@ -52,9 +52,9 @@ class BaseRepository(ABC, Generic[T]):
     async def commit(self) -> None:
         self.db.commit()
 
-    async def refresh(self, entity: T) -> None:
+    async def refresh(self, entity: _T) -> None:
         self.db.refresh(entity)
 
-    async def refresh_bulk(self, entities: List[T]) -> None:
+    async def refresh_bulk(self, entities: List[_T]) -> None:
         for entity in entities:
             self.db.refresh(entity)
