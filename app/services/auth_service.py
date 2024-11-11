@@ -17,7 +17,8 @@ class AuthService:
     async def create_user(self, new_user_dto: UserRegisterServiceDto):
         hashed_password = PasswordHasher.hash_password(new_user_dto.password)
         user_model = new_user_dto.to_model(hashed_password)
-        await self.user_repository.create_user(user_model)
+        await self.user_repository.create(user_model)
+        await self.user_repository.commit()
 
     async def authenticate_user(self, login_dto: UserLoginServiceDto):
         existing_user = await self.user_repository.get_by_username(login_dto.username)
@@ -27,9 +28,11 @@ class AuthService:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail='Invalid credentials.')
 
+        user_uuid_str = str(existing_user.id)
+
         token = TokenGenerator.create_access_token(
             existing_user.username,
-            existing_user.id,
+            user_uuid_str,
             existing_user.role,
             timedelta(weeks=4))
 

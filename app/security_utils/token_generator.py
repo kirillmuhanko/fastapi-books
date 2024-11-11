@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
-from jose import jwt, JWTError
+
 from fastapi import HTTPException, status
+from jose import jwt, JWTError
 
 SECRET_KEY = "197b2c37c391bed93fe80344fe73b806947a65e36206e05a1a23c2fa12702fe3"
 ALGORITHM = "HS256"
@@ -9,7 +10,7 @@ ALGORITHM = "HS256"
 class TokenGenerator:
     @staticmethod
     def create_access_token(
-        username: str, user_id: int, role: str, expires_delta: timedelta
+            username: str, user_id: str, role: str, expires_delta: timedelta
     ) -> str:
         encode = {"sub": username, "id": user_id, "role": role}
         expires = datetime.now(timezone.utc) + expires_delta

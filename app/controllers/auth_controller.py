@@ -23,4 +23,5 @@ async def register(user_register_request_dto: UserRegisterRequestDto,
 async def login(user_login_request_dto: Annotated[UserLoginRequestDto, Depends()],
                 auth_service: AuthService = Depends(get_auth_service)):
     user_login_service_dto = user_login_request_dto.to_service_dto()
-    await auth_service.authenticate_user(user_login_service_dto)
+    access_token = await auth_service.authenticate_user(user_login_service_dto)
+    return AuthTokenModel(access_token=access_token, token_type="Bearer")
