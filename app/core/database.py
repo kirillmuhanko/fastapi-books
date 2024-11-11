@@ -1,23 +1,27 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:admin@localhost/app1"
+SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://postgres:admin@localhost/app1"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_async_engine(SQLALCHEMY_DATABASE_URL)
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+AsyncSessionLocal = async_sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    autocommit=False,
+    autoflush=False
+)
 
 Base = declarative_base()
 
 
-def get_db():
-    db: Session = SessionLocal()
-    try:
-        yield db
-        db.commit()  # Commit if everything goes well
-    except Exception:
-        db.rollback()  # Rollback if there's an exception
-        raise  # Re-raise the exception so it can be handled by FastAPI
-    finally:
-        db.close()  # Close the session
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+            await session.commit()  # Commit if everything goes well
+        except Exception:
+            await session.rollback()  # Rollback if there's an exception
+            raise  # Re-raise the exception so it can be handled by FastAPI
+        finally:
+            await session.close()  # Close the session

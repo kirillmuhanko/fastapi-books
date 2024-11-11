@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Any, Generic, Optional, List
+from typing import TypeVar, Any, Generic, Optional, Sequence
 from uuid import UUID
 
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 _T = TypeVar("_T", bound=Any)
 
 
 class BaseRepository(ABC, Generic[_T]):
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
 
     @abstractmethod
@@ -20,7 +20,7 @@ class BaseRepository(ABC, Generic[_T]):
         pass
 
     @abstractmethod
-    async def get_all(self, limit: int = 100, offset: int = 0) -> List[_T]:
+    async def get_all(self, limit: int = 100, offset: int = 0) -> Sequence[_T]:
         pass
 
     @abstractmethod
@@ -32,29 +32,29 @@ class BaseRepository(ABC, Generic[_T]):
         pass
 
     @abstractmethod
-    async def bulk_create(self, entities: List[_T]) -> List[_T]:
+    async def bulk_create(self, entities: Sequence[_T]) -> Sequence[_T]:
         pass
 
     @abstractmethod
-    async def bulk_update(self, entities: List[_T]) -> List[_T]:
+    async def bulk_update(self, entities: Sequence[_T]) -> Sequence[_T]:
         pass
 
     @abstractmethod
-    async def bulk_delete(self, entity_ids: List[UUID]) -> None:
+    async def bulk_delete(self, entity_ids: Sequence[UUID]) -> None:
         pass
 
     async def begin_transaction(self):
-        self.db.begin()
+        await self.db.begin()
 
     async def rollback_transaction(self):
-        self.db.rollback()
+        await self.db.rollback()
 
     async def commit(self) -> None:
-        self.db.commit()
+        await self.db.commit()
 
     async def refresh(self, entity: _T) -> None:
-        self.db.refresh(entity)
+        await self.db.refresh(entity)
 
-    async def refresh_bulk(self, entities: List[_T]) -> None:
+    async def refresh_bulk(self, entities: Sequence[_T]) -> None:
         for entity in entities:
-            self.db.refresh(entity)
+            await self.db.refresh(entity)
