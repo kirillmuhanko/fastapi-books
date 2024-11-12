@@ -3,14 +3,14 @@ from datetime import timedelta
 from fastapi import HTTPException
 from starlette import status
 
-from app.repositories.user_repository import UserRepository
 from app.security_utils.password_hasher import PasswordHasher
 from app.security_utils.token_generator import TokenGenerator
 from app.services_dtos.auth.user_login_service_dto import UserLoginServiceDto
 from app.services_dtos.auth.user_register_service_dto import UserRegisterServiceDto
+from app.user.repositories.user_repository import UserRepository
 
 
-class AuthService:
+class UserAuthService:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
 
