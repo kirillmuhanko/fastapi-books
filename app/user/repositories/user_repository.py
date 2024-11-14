@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.books_db_context.user_model import UserModel
+from app.db.models.books_db_context.user_model import UserModel
 from app.repositories.base_repository import BaseRepository
 
 

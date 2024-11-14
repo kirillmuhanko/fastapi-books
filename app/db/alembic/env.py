@@ -4,7 +4,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, MetaData
 from sqlalchemy import pool
 
-from app.models.books_db_context import user_model, todos_model
+from app.db.models.books_db_context import todos_model, user_model
 
 
 def combine_metadata(*metadata_objects):

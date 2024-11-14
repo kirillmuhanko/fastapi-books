@@ -3,9 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from starlette import status
 
-from app.models.auth.auth_token_model import AuthTokenModel
 from app.user.dependencies import get_auth_service
 from app.user.dtos.user_auth.request_dtos import UserLoginRequestDto, UserRegisterRequestDto
+from app.user.models.user_auth.auth_token_model import AuthTokenModel
 from app.user.services.user_auth_service import UserAuthService
 
 router = APIRouter(prefix="/auth", tags=["auth"])

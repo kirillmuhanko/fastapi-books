@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from app.models.books_db_context.user_model import UserModel
+from app.db.models.books_db_context.user_model import UserModel
 
 
 class UserRegisterServiceDto(BaseModel):

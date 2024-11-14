@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy import Column, UUID, String, Integer, Boolean, ForeignKey
 
-from app.core.database import Base
+from app.db.session import Base
 
 
 class TodosModel(Base):

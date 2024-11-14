@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy import Column, UUID, String, Boolean
 
-from app.core.database import Base
+from app.db.session import Base
 
 
 class UserModel(Base):
