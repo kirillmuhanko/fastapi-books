@@ -3,10 +3,9 @@ from datetime import timedelta
 from fastapi import HTTPException
 from starlette import status
 
-from app.security_utils.password_hasher import PasswordHasher
-from app.security_utils.token_generator import TokenGenerator
-from app.services_dtos.auth.user_login_service_dto import UserLoginServiceDto
-from app.services_dtos.auth.user_register_service_dto import UserRegisterServiceDto
+from app.security.generators.token_generator import TokenGenerator
+from app.security.hashers.password_hasher import PasswordHasher
+from app.user.dtos.user_auth_dtos import UserRegisterDto, UserLoginDto
 from app.user.repositories.user_repository import UserRepository
 
 
@@ -14,13 +13,13 @@ class UserAuthService:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
 
-    async def create_user(self, new_user_dto: UserRegisterServiceDto):
+    async def create_user(self, new_user_dto: UserRegisterDto):
         hashed_password = PasswordHasher.hash_password(new_user_dto.password)
         user_model = new_user_dto.to_model(hashed_password)
         await self.user_repository.create(user_model)
         await self.user_repository.commit()
 
-    async def authenticate_user(self, login_dto: UserLoginServiceDto):
+    async def authenticate_user(self, login_dto: UserLoginDto):
         existing_user = await self.user_repository.get_by_username(login_dto.username)
         password_is_valid = PasswordHasher.verify_password(login_dto.password, existing_user.hashed_password)
 

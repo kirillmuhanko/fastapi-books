@@ -1,8 +1,7 @@
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr, Field
 
-from app.services_dtos.auth.user_login_service_dto import UserLoginServiceDto
-from app.services_dtos.auth.user_register_service_dto import UserRegisterServiceDto
+from app.user.dtos.user_auth_dtos import UserRegisterDto, UserLoginDto
 
 
 class UserRegisterRequestDto(BaseModel):
@@ -16,9 +15,9 @@ class UserRegisterRequestDto(BaseModel):
     password: str = Field(..., min_length=8, max_length=128, description="User's password")
     role: str = Field(..., description="User's role")
 
-    def to_service_dto(self) -> UserRegisterServiceDto:
+    def to_service_dto(self) -> UserRegisterDto:
         """Converts to service DTO."""
-        return UserRegisterServiceDto(
+        return UserRegisterDto(
             email=self.email,
             username=self.username,
             first_name=self.first_name,
@@ -42,7 +41,7 @@ class UserRegisterRequestDto(BaseModel):
 
 class UserLoginRequestDto(OAuth2PasswordRequestForm):
     def to_service_dto(self):
-        return UserLoginServiceDto(
+        return UserLoginDto(
             username=self.username,
             password=self.password
         )

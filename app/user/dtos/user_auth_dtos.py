@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from app.db.models.books_db_context.user_model import UserModel
 
 
-class UserRegisterServiceDto(BaseModel):
+class UserRegisterDto(BaseModel):
     email: str
     username: str
     first_name: str
@@ -21,3 +21,8 @@ class UserRegisterServiceDto(BaseModel):
             hashed_password=hashed_password,
             role=self.role
         )
+
+
+class UserLoginDto(BaseModel):
+    username: str
+    password: str
