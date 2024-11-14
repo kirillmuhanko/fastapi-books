@@ -1,7 +1,7 @@
 from app.db.models.books_db_context.user_model import UserModel
 
 
-def map_user_model(existing_user: UserModel, new_user_data: UserModel) -> UserModel:
+def map_user_model_to_user_model(existing_user: UserModel, new_user_data: UserModel) -> UserModel:
     existing_user.email = new_user_data.email
     existing_user.username = new_user_data.username
     existing_user.first_name = new_user_data.first_name

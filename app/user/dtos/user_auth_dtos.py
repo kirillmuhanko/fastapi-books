@@ -9,7 +9,15 @@ class UserRegisterDto(BaseModel):
     password: str
     role: str
 
+    model_config = {
+        'from_attributes': True
+    }
+
 
 class UserLoginDto(BaseModel):
     username: str
     password: str
+
+    model_config = {
+        'from_attributes': True
+    }

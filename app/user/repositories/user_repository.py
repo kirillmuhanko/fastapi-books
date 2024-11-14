@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models.books_db_context.user_model import UserModel
 from app.db.repositories.base_repository import BaseRepository
-from app.user.mappings.user_model_mappings import map_user_model
+from app.user.mappings.user_model_mappings import map_user_model_to_user_model
 
 
 class UserRepository(BaseRepository[UserModel]):
@@ -41,7 +41,7 @@ class UserRepository(BaseRepository[UserModel]):
         existing_user = await self.get(user_id)
         if not existing_user:
             return None
-        existing_user = map_user_model(existing_user, updated_user)
+        existing_user = map_user_model_to_user_model(existing_user, updated_user)
         await self.db.commit()
         await self.db.refresh(existing_user)
         return existing_user
@@ -76,7 +76,7 @@ class UserRepository(BaseRepository[UserModel]):
             for updated_user in updated_users:
                 existing_user = existing_users_dict.get(updated_user.id)
                 if existing_user:
-                    mapped_user = map_user_model(existing_user, updated_user)
+                    mapped_user = map_user_model_to_user_model(existing_user, updated_user)
                     updated_list.append(mapped_user)
             await self.db.commit()
             for user in updated_list:
