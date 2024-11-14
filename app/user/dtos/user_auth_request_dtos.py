@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
+from pydantic_settings import SettingsConfigDict
 
 
 class UserRegisterRequestDto(BaseModel):
@@ -9,14 +10,15 @@ class UserRegisterRequestDto(BaseModel):
     password: str = Field(..., min_length=8, max_length=128, description="User's password")
     role: str = Field(..., description="User's role")
 
-    class Config:
-        json_schema_extra = {
+    model_config = SettingsConfigDict(
+        json_schema_extra={
             "example": {
-                "email": "john.doe@example.com",
-                "username": "johndoe123",
-                "first_name": "John",
-                "last_name": "Doe",
-                "password": "StrongPassword123!",
-                "role": "user"
+                "email": "test@example.com",
+                "username": "test_user",
+                "first_name": "Test",
+                "last_name": "User",
+                "password": "Test1234",
+                "role": "test_role"
             }
         }
+    )
