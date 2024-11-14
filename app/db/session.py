@@ -1,3 +1,6 @@
+from functools import wraps
+
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -25,3 +28,15 @@ async def get_db():
             raise  # Re-raise the exception so it can be handled by FastAPI
         finally:
             await session.close()  # Close the session
+
+
+def handle_db_errors(func):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        try:
+            return await func(*args, **kwargs)
+        except SQLAlchemyError as e:
+            await args[0].db.rollback()
+            raise e
+
+    return wrapper
