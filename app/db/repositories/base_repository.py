@@ -9,10 +9,13 @@ _T = TypeVar("_T", bound=Any)
 
 class BaseRepository(ABC, Generic[_T]):
     def __init__(self, db: AsyncSession):
+        """
+        Initialize the repository with a database session.
+        """
         self.db = db
 
     @abstractmethod
-    async def create(self, entity: _T):
+    async def create(self, entity: _T) -> _T:
         pass
 
     @abstractmethod
@@ -24,11 +27,11 @@ class BaseRepository(ABC, Generic[_T]):
         pass
 
     @abstractmethod
-    async def update(self, entity: _T) -> Optional[_T]:
+    async def update(self, entity_id: UUID, updated_entity: _T) -> Optional[_T]:
         pass
 
     @abstractmethod
-    async def delete(self, entity_id: UUID) -> None:
+    async def delete(self, entity_id: UUID) -> bool:
         pass
 
     @abstractmethod
@@ -40,21 +43,5 @@ class BaseRepository(ABC, Generic[_T]):
         pass
 
     @abstractmethod
-    async def bulk_delete(self, entity_ids: Sequence[UUID]) -> None:
+    async def bulk_delete(self, entity_ids: Sequence[UUID]) -> int:
         pass
-
-    async def begin_transaction(self):
-        await self.db.begin()
-
-    async def rollback_transaction(self):
-        await self.db.rollback()
-
-    async def commit(self) -> None:
-        await self.db.commit()
-
-    async def refresh(self, entity: _T) -> None:
-        await self.db.refresh(entity)
-
-    async def refresh_bulk(self, entities: Sequence[_T]) -> None:
-        for entity in entities:
-            await self.db.refresh(entity)

@@ -6,6 +6,7 @@ from starlette import status
 from app.security.generators.token_generator import TokenGenerator
 from app.security.hashers.password_hasher import PasswordHasher
 from app.user.dtos.user_auth_dtos import UserRegisterDto, UserLoginDto
+from app.user.mappings.user_auth_dto_mappings import map_user_register_dto_to_user_model
 from app.user.repositories.user_repository import UserRepository
 
 
@@ -15,9 +16,8 @@ class UserAuthService:
 
     async def create_user(self, new_user_dto: UserRegisterDto):
         hashed_password = PasswordHasher.hash_password(new_user_dto.password)
-        user_model = new_user_dto.to_model(hashed_password)
+        user_model = map_user_register_dto_to_user_model(new_user_dto, hashed_password)
         await self.user_repository.create(user_model)
-        await self.user_repository.commit()
 
     async def authenticate_user(self, login_dto: UserLoginDto):
         existing_user = await self.user_repository.get_by_username(login_dto.username)
