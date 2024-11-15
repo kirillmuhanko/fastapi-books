@@ -3,6 +3,7 @@ from datetime import timedelta
 from fastapi import HTTPException
 from starlette import status
 
+from app.core.config import settings
 from app.security.generators.token_generator import TokenGenerator
 from app.security.hashers.password_hasher import PasswordHasher
 from app.user.dtos.user_auth_dtos import UserRegisterDto, UserLoginDto
@@ -33,6 +34,6 @@ class UserAuthService:
             existing_user.username,
             user_uuid_str,
             existing_user.role,
-            timedelta(weeks=4))
+            timedelta(weeks=settings.access_token_expire_weeks))
 
         return token

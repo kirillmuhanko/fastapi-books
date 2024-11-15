@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     access_token_expire_weeks: int = 4
 
     model_config = SettingsConfigDict(
-        env_prefix='my_prefix_',
+        env_prefix='FASTAPI_BOOKS_',
         env_file=".env",
         env_file_encoding="utf-8"
     )

@@ -3,7 +3,8 @@ from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, status
 from jose import jwt, JWTError
 
-SECRET_KEY = "197b2c37c391bed93fe80344fe73b806947a65e36206e05a1a23c2fa12702fe3"
+from app.core.config import settings
+
 ALGORITHM = "HS256"
 
 
@@ -15,12 +16,12 @@ class TokenGenerator:
         encode = {"sub": username, "id": user_id, "role": role}
         expires = datetime.now(timezone.utc) + expires_delta
         encode.update({"exp": expires})
-        return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
+        return jwt.encode(encode, settings.secret_key, algorithm=ALGORITHM)
 
     @staticmethod
     def decode_access_token(token: str):
         try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            payload = jwt.decode(token, settings.secret_key, algorithms=[ALGORITHM])
             username: str = payload.get("sub")
             user_id: int = payload.get("id")
             user_role: str = payload.get("role")
